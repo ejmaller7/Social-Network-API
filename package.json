@@ -1,0 +1,27 @@
+{
+  "name": "social-network-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ejmaller7/Social-Network-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ejmaller7/Social-Network-API/issues"
+  },
+  "homepage": "https://github.com/ejmaller7/Social-Network-API#readme",
+  "description": ""
+}
