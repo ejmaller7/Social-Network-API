@@ -1,12 +1,14 @@
-const { Thought, User } = require('../models');
+const Thought = require('../models/thought'); 
+const User = require('../models/user');
 
 module.exports = {
   async getThoughts(req, res) {
     try {
-      const thoughts = await Thought.find();
+      const thoughts = await Thought.find(); // Ensure Thought model is being used correctly
       res.json(thoughts);
     } catch (err) {
-      res.status(500).json(err);
+      console.error(err);  // Log error in terminal for debugging
+      res.status(500).json({ message: 'Error retrieving thoughts', error: err.message });
     }
   },
 
@@ -23,7 +25,12 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
-      await User.findByIdAndUpdate(req.body.userId, { $push: { thoughts: thought._id } }, { new: true });
+      // Push thought ID into associated user's thoughts array
+      await User.findByIdAndUpdate(
+        req.body.userId,
+        { $push: { thoughts: thought._id } },
+        { new: true }
+      );
       res.json(thought);
     } catch (err) {
       res.status(500).json(err);
@@ -44,7 +51,15 @@ module.exports = {
     try {
       const thought = await Thought.findByIdAndDelete(req.params.thoughtId);
       if (!thought) return res.status(404).json({ message: 'Thought not found' });
-      res.json({ message: 'Thought deleted successfully' });
+
+      // Remove thought ID from associated user's thoughts array
+      await User.findOneAndUpdate(
+        { thoughts: req.params.thoughtId },
+        { $pull: { thoughts: req.params.thoughtId } },
+        { new: true }
+      );
+
+      res.json({ message: 'Thought deleted' });
     } catch (err) {
       res.status(500).json(err);
     }
